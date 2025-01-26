@@ -2,8 +2,8 @@
 
 #define PIN 12        // Pin where NeoPixel is connected
 #define NUM_PIXELS 64 // Number of LEDs in the strip
-#define BUTTON_A_PIN 10
-#define BUTTON_B_PIN 11
+#define BUTTON_A_PIN 14
+#define BUTTON_B_PIN 27
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
@@ -31,8 +31,9 @@ void go() {
     strip.show();
 
     uint16_t ranges[8] = {0, 8, 16, 24, 32, 40, 48, 56};
-    for (uint8_t i = 0; i < 8; i++) {
+    for (uint8_t i = 0; i < 8; i += 2) {
         showRange(ranges[i], 8, redColor);
+        showRange(ranges[i+1], 8, redColor);
         delay(1000);
     }
 
@@ -47,22 +48,18 @@ void go() {
 void setup() {
     strip.begin();
     initialise();
+
+     pinMode(BUTTON_A_PIN, INPUT_PULLUP);
+     pinMode(BUTTON_B_PIN, INPUT_PULLUP);
 }
 
 void loop() {
-//Test Go code
-  static int debugVar = 1;
-  if(debugVar)
-  {
-    debugVar = 0;
-    go();
-  }
 
-    if (digitalRead(BUTTON_A_PIN) == HIGH) { // Replace BUTTON_A_PIN with the pin connected to Button A
+    if (digitalRead(BUTTON_A_PIN) == LOW) { // Replace BUTTON_A_PIN with the pin connected to Button A
         go();
     }
 
-    if (digitalRead(BUTTON_B_PIN) == HIGH) { // Replace BUTTON_B_PIN with the pin connected to Button B
+    if (digitalRead(BUTTON_B_PIN) == LOW) { // Replace BUTTON_B_PIN with the pin connected to Button B
         BWasPressed = true;
         strip.fill(yellowColor, 0, NUM_PIXELS);
         strip.show();
@@ -74,6 +71,7 @@ void loop() {
         BWasPressed = false;
         strip.fill(redColor, 0, NUM_PIXELS);
         strip.show();
+        delay(1000);
     }
 }
 
