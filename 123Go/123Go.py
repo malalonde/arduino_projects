@@ -12,7 +12,7 @@ PIN = board.IO12
 # Number of LEDs in the strip
 NUM_PIXELS = 64
 # Button pins
-BUTTON_A_PIN = board.IO26
+BUTTON_A_PIN = board.IO14
 BUTTON_B_PIN = board.IO27
 
 # Initialize NeoPixel strip
