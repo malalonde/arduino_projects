@@ -34,9 +34,9 @@ from lcd.lcd import CursorMode
 lcd = LCD(I2CPCF8574Interface(i2c, 0x27), num_rows=4, num_cols=20)
 
 lcd.set_cursor_pos(0, 0)
-lcd.print("Hi Patrick!")
-lcd.message = "Hello\nCircuitPython"
+lcd.print("Hello racers!")
 time.sleep(2)
+lcd.clear()
 
 start_time = time.monotonic()
 last_pressed_time = start_time
@@ -51,9 +51,21 @@ timer_alarm = alarm.time.TimeAlarm(monotonic_time=time.monotonic() + 1)
 
 print("Monitoring LM393 sensor with PinAlarm...")
 
+def show_lap_time():
+    lcd.set_cursor_pos(0, 0)
+    timeStr = f"Last Lap:{previous_lap_duration}"
+    lcd.print(timeStr)
+    
+    lcd.set_cursor_pos(1, 0)
+    timeStr = f"Lap: {last_lap_duration}"
+    lcd.print(timeStr)
+
+show_lap_time()
+
 while True:
     button_click = False
     # Check if the pin alarm has been triggered
+    timer_alarm = alarm.time.TimeAlarm(monotonic_time=time.monotonic() + 0.2)
     alarm.light_sleep_until_alarms(pin_alarm, timer_alarm)
 
     if not button_a.value:  # Button A is pressed
@@ -69,20 +81,14 @@ while True:
         previous_lap_duration = last_lap_duration
         last_lap_duration = time.monotonic() - last_pressed_time
         last_pressed_time = time.monotonic()
-        
-        lcd.set_cursor_pos(0, 0)
-        timeStr = f"Last Lap:{previous_lap_duration}"
-        lcd.print(timeStr)
-        
-        lcd.set_cursor_pos(1, 0)
-        timeStr = f"Lap: {last_lap_duration}"
-        lcd.print(timeStr)
-    if alarm.wake_alarm == timer_alarm:
-        print("Wake from timer!")
+        show_lap_time()
 
-    timer_alarm = alarm.time.TimeAlarm(monotonic_time=time.monotonic() + 5)
-
+    #if alarm.wake_alarm == timer_alarm:
+    #    print("Wake from timer!")
+    
+    #if sensor.value:
+    #    print("Value UP") 
     
     # Main program can continue running here (non-blocking)
-    print("Main loop running...")  
+    #print("Main loop running...")  
     #time.sleep(0.1)  # Small delay to prevent CPU overload
