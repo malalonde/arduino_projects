@@ -9,9 +9,6 @@ import busio
 from lcd.lcd import LCD
 from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
 
-# Import the SSD1306 module.
-import adafruit_ssd1306
-
 button_a = digitalio.DigitalInOut(board.IO10)
 button_a.direction = digitalio.Direction.INPUT
 button_a.pull = digitalio.Pull.UP
@@ -107,10 +104,7 @@ def poll_slot_sensor_until(timeout) -> bool:
 # Initialise LCD text
 lcd.clear()
 timeStr = f"A{lap_duration_a:6.3f} B{lap_duration_b:6.3f}"
-
 timeStr += "\nBest:"
-if best_lap_duration > 0:
-    timeStr += f"{best_lap_duration:6.3f} ({best_track_str})"
 lcd.set_cursor_pos(0, 0)
 lcd.print(timeStr)
 
