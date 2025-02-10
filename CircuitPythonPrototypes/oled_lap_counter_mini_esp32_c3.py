@@ -54,7 +54,6 @@ def poll_slot_sensor_until(timeout) -> bool:
         counter+=1
         if slot_sensor.value:
             return True
-    print(f"Numchecks:{counter}")
     return False
 
 display.fill(0)
@@ -68,17 +67,19 @@ display.show()
 start_time = time.monotonic()
 last_pressed_time = start_time
 last_lap_duration = last_pressed_time - start_time
+best_lap_duration = 300
 previous_lap_duration = last_lap_duration
 buttonPressed = False
 
 def show_lap_time():
     display.fill(0)
-    timeStr = f"Last Lap:{previous_lap_duration}"
-    display.text(timeStr, 0, 0, 1)
-    
     timeStr = f"Lap: {last_lap_duration}"
     display.text(timeStr, 0, 10, 1)
+    
+    timeStr = f"Best:{best_lap_duration}"
+    display.text(timeStr, 0, 0, 1)
     display.show()
+    
 
 show_lap_time()
 
@@ -92,10 +93,12 @@ while True:
     else:
         buttonPressed = False
     
-    if poll_slot_sensor_until(1) or button_click:
+    if poll_slot_sensor_until(5) or button_click:
         print("Object detected! 🚀")  # Fast response when object blocks sensor
         buttonPressed = True
         previous_lap_duration = last_lap_duration
         last_lap_duration = time.monotonic() - last_pressed_time
         last_pressed_time = time.monotonic()
+        if(last_lap_duration < best_lap_duration):
+            best_lap_duration = last_lap_duration
         show_lap_time()
