@@ -7,9 +7,11 @@
 // NeoPixel strip length, in pixels
 #define NUM_PIXELS 200
 #define NEOPIXEL_PIN 21
+#define LED_PIN 13   // onboard status LED on RP2040 Feather/PropMaker
 
 // create a neopixel strip
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIXELS, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel stripOnBoard = Adafruit_NeoPixel(1, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 
 void setup() {
   Serial.begin(115200);
@@ -24,6 +26,16 @@ void setup() {
   strip.begin();
 
   strip.setBrightness(4);
+
+  // Onboard LED
+  pinMode(LED_PIN, OUTPUT);  // set pin as output
+  digitalWrite(LED_PIN, HIGH);  // turn LED on
+
+  // Onboard Color LED
+  stripOnBoard.begin();
+  stripOnBoard.setBrightness(4);
+  stripOnBoard.setPixelColor(0, stripOnBoard.Color(128,0,128));
+  stripOnBoard.show();
 }
 
 
