@@ -38,6 +38,9 @@ Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 int resPin = A5;
 int mfioPin = A3;
 
+int D1Pin = 1;
+int D2Pin = 2;
+
 // Takes address, reset pin, and MFIO pin.
 SparkFun_Bio_Sensor_Hub bioHub(resPin, mfioPin); 
 
@@ -141,5 +144,27 @@ void loop(){
     
     tft.setCursor(60, 60);
     tft.println(body.heartRate); 
+  }
+
+  static int d1Pressed = HIGH;
+  int pressed = digitalRead(D1Pin);
+  if(pressed != d1Pressed)
+  {
+    d1Pressed = pressed;
+    tft.setCursor(0, 0);
+    tft.setTextColor(ST77XX_RED,ST77XX_BLACK);
+    tft.setTextSize(1);
+    Serial.print("Button: ");
+    tft.print("Button: ");
+    if(pressed == HIGH)
+    {
+      Serial.print("Pressed     ");
+      tft.print("1");
+    }
+    else
+    {
+      Serial.print("Not Pressed");
+      tft.print("0");
+    }
   }
 }
