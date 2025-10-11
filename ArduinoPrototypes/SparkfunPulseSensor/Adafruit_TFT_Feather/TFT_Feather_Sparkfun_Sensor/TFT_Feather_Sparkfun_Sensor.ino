@@ -135,7 +135,7 @@ void loop(){
   static int count = 0;
   count++;
     Serial.println(count); 
-  if(count % 10 && body.heartRate != 0)
+  if(count % 10 && body.heartRate > 40 && body.heartRate < 190)
   {
     tft.setTextColor(ST77XX_RED,ST77XX_BLACK);
     tft.setTextWrap(true);
