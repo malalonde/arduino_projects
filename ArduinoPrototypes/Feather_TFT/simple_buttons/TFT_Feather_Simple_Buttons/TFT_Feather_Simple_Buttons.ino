@@ -5,12 +5,13 @@ int D0Pin = 0;
 int D1Pin = 1;
 int D2Pin = 2;
 
-void setup(){
-  Serial.begin(115200);
-}
 bool d0Pressed = false;
 bool d1Pressed = false;
 bool d2Pressed = false;
+
+void setup(){
+  Serial.begin(115200);
+}
 
 void loop(){
   // D0
