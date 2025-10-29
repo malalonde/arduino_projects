@@ -79,6 +79,19 @@ void setup(){
    tft.setTextSize(3);
 //end screen
   Wire.begin();
+
+  // Chatgpt suggestion reset mfio and reset right before connecting
+  // Reset the MAX32664 cleanly
+  pinMode(resPin, OUTPUT);
+  digitalWrite(resPin, LOW);
+  delay(5);
+  digitalWrite(resPin, HIGH);
+  delay(5);
+  // Make sure MFIO is LOW (normal mode)
+  pinMode(mfioPin, OUTPUT);
+  digitalWrite(mfioPin, LOW);
+  delay(5);
+
   int result = bioHub.begin();
   if (result == 0) // Zero errors!
     Serial.println("Sensor started!");
