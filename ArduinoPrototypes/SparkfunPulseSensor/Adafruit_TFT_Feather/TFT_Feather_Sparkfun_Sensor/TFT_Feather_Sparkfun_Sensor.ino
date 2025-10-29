@@ -35,8 +35,8 @@
 Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
 // Reset pin, MFIO pin
-int resPin = A5;
-int mfioPin = A3;
+int resPin = A3;
+int mfioPin = A5;
 
 int D1Pin = 1;
 int D2Pin = 2;
