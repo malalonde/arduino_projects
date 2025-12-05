@@ -67,7 +67,7 @@ void setup(){
   // turn on the TFT / I2C power supply
   pinMode(TFT_I2C_POWER, OUTPUT);
   digitalWrite(TFT_I2C_POWER, HIGH);
-  delay(10);
+  delay(1000);
 
   // initialize TFT
   tft.init(135, 240); // Init ST7789 240x135
