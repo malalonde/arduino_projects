@@ -2,7 +2,7 @@
 
 
 #define LED_PIN LED_BUILTIN //Red
-#define BUTTON_PIN D10
+#define BUTTON_PIN D9
 
 void setup() {
 
@@ -58,12 +58,6 @@ void loop() {
     if(millis() > 60000)
     {
         Serial.println("Time expired, going to sleep.");
-        
-        // Turn off all the LEDs
-        digitalWrite(LED_GREEN, HIGH); 
-        digitalWrite(LED_BLUE, HIGH); 
-        digitalWrite(LED_PIN, LOW); 
-
         goToSleep(BUTTON_PIN);
     }
 
