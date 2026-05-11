@@ -20,6 +20,7 @@
 // Create NeoPixel objects
 Adafruit_NeoPixel ledMatrix = Adafruit_NeoPixel(MATRIX_NUM_LEDS, MATRIX_PIN);
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(STRIP_NUM_LEDS, STRIP_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel onboardLed = Adafruit_NeoPixel(1, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 
 // Colors
 uint32_t redColor;
@@ -64,7 +65,7 @@ void setup() {
 
     // Initialize NeoPixels
     ledMatrix.begin();
-    ledMatrix.setBrightness(50);  // ~25% brightness
+    ledMatrix.setBrightness(128);  // ~25% brightness
     ledMatrix.clear();
     ledMatrix.show();
 
@@ -73,12 +74,43 @@ void setup() {
     strip.clear();
     strip.show();
 
+    onboardLed.begin();
+    onboardLed.setBrightness(50);
+    onboardLed.clear();
+    onboardLed.show();
+
     // Define colors (after NeoPixel objects are created)
     redColor = ledMatrix.Color(50, 0, 0);
     greenColor = ledMatrix.Color(0, 50, 0);
     yellowColor = ledMatrix.Color(50, 50, 0);
     blackColor = ledMatrix.Color(0, 0, 0);
     blueColor = ledMatrix.Color(0, 0, 50);
+
+    // Smooth blue fade in/out on matrix and onboard LED to indicate ready
+    // Fade in
+    for (int brightness = 0; brightness <= 50; brightness += 2) {
+        uint32_t fadeBlue = ledMatrix.Color(0, 0, brightness);
+        ledMatrix.fill(fadeBlue, 0, MATRIX_NUM_LEDS);
+        ledMatrix.show();
+        onboardLed.setPixelColor(0, fadeBlue);
+        onboardLed.show();
+        delay(20);
+    }
+    // Hold
+    delay(300);
+    // Fade out
+    for (int brightness = 50; brightness >= 0; brightness -= 2) {
+        uint32_t fadeBlue = ledMatrix.Color(0, 0, brightness);
+        ledMatrix.fill(fadeBlue, 0, MATRIX_NUM_LEDS);
+        ledMatrix.show();
+        onboardLed.setPixelColor(0, fadeBlue);
+        onboardLed.show();
+        delay(20);
+    }
+    ledMatrix.clear();
+    ledMatrix.show();
+    onboardLed.clear();
+    onboardLed.show();
 
     // Initial animation
     ledColor = blueColor;
@@ -158,6 +190,10 @@ void go() {
     strip.clear();
     showLedStrip(0, redColor);
 
+    // Onboard LED red during countdown
+    onboardLed.setPixelColor(0, redColor);
+    onboardLed.show();
+
     // Countdown sequence on 8x8 matrix (rows light up)
     uint16_t ranges[] = {0, 8, 16, 24, 32, 40, 48, 56};
     for (uint8_t i = 0; i < 8; i += 2) {
@@ -170,6 +206,10 @@ void go() {
     ledMatrix.fill(greenColor, 0, MATRIX_NUM_LEDS);
     ledMatrix.show();
 
+    // Onboard LED green for GO!
+    onboardLed.setPixelColor(0, greenColor);
+    onboardLed.show();
+
     // Start green moving animation on strip
     startAnimation(greenColor, 10000, true);
 
@@ -179,7 +219,13 @@ void go() {
         updateLedStrip();
     }
 
-    // Turn off matrix
+    // Fade out matrix from green (onboard LED stays green)
+    for (int brightness = 50; brightness >= 0; brightness -= 2) {
+        uint32_t fadeGreen = ledMatrix.Color(0, brightness, 0);
+        ledMatrix.fill(fadeGreen, 0, MATRIX_NUM_LEDS);
+        ledMatrix.show();
+        delay(50);
+    }
     ledMatrix.clear();
     ledMatrix.show();
 }
