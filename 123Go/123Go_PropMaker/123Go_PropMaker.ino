@@ -145,6 +145,14 @@ void showRange(uint16_t start, uint16_t length, uint32_t color) {
     ledMatrix.show();
 }
 
+void showColumn(uint8_t col, uint32_t color) {
+    // Light up a column (8 pixels vertically)
+    for (uint8_t row = 0; row < 8; row++) {
+        ledMatrix.setPixelColor(row * 8 + col, color);
+    }
+    ledMatrix.show();
+}
+
 void startAnimation(uint32_t iColor, unsigned long duration, bool moving) {
     animationMoving = moving;
     animationDuration = duration;
@@ -194,11 +202,10 @@ void go() {
     onboardLed.setPixelColor(0, redColor);
     onboardLed.show();
 
-    // Countdown sequence on 8x8 matrix (rows light up)
-    uint16_t ranges[] = {0, 8, 16, 24, 32, 40, 48, 56};
-    for (uint8_t i = 0; i < 8; i += 2) {
-        showRange(ranges[i], 8, redColor);
-        showRange(ranges[i + 1], 8, redColor);
+    // Countdown sequence on 8x8 matrix (columns light up, right to left)
+    for (int8_t col = 7; col >= 0; col -= 2) {
+        showColumn(col, redColor);
+        showColumn(col - 1, redColor);
         delay(1000);
     }
 
