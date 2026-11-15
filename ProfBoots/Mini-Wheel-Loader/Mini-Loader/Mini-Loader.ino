@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ESP32Servo.h>  // by Kevin Harrington
 #include <Bluepad32.h>
+#include "LoaderSound.h"  // engine sounds: amp wiring and settings are in this file
 
 ControllerPtr myControllers[BP32_MAX_GAMEPADS];
 
@@ -110,6 +111,9 @@ void processGamepad(ControllerPtr ctl) {
 
   //Throttle
   processThrottle(ctl->axisY());
+  //Engine sound: revs follow the drive stick, pump sound while an arm/bucket button is held
+  loaderSound(ctl->axisY(), ctl->r1() || ctl->r2() || ctl->l1() || ctl->l2() || ctl->a() || ctl->y());
+  loaderSoundButton(ctl->miscHome());  // Start / Options / + button: sound on/off
 
   //Steering
   processSteering(ctl->axisRX());
@@ -442,6 +446,8 @@ void setup() {
   attachmentServo.attach(attachmentServoPin);
   attachmentServo.write(10);
 
+  loaderSoundBegin();  // start the engine sound (after all pinMode calls)
+
 
   lastInputTime = millis();  // initialize failsafe timer
 }
@@ -466,6 +472,7 @@ void loop() {
   else { vTaskDelay(1); }
   // Failsafe check: if no input for too long, stop motors
   if (millis() - lastInputTime > INPUT_TIMEOUT) {
+    loaderSound(0, false);  // engine sound back to idle
     digitalWrite(rightBladeTilt0, LOW);
     digitalWrite(rightBladeTilt1, LOW);
     digitalWrite(leftBladeTilt0, LOW);
