@@ -20,8 +20,8 @@
 
 // PCA9685 servo pulse mapping (in pulse counts out of 4096)
 #define SERVO_FREQ 50
-#define SERVOMIN 150   // ~732us at 50Hz
-#define SERVOMAX 600   // ~2929us at 50Hz
+#define SERVOMIN 102   // ~732us at 50Hz
+#define SERVOMAX 512   // ~2929us at 50Hz
 
 // DNS Server for Captive Portal
 DNSServer dnsServer;
@@ -372,6 +372,7 @@ void setup() {
   display.clearDisplay();
   display.setTextColor(SSD1306_WHITE);
   display.setTextSize(1);
+  display.setRotation(2);
   display.setCursor(0,0);
   display.println(F("Creating WiFi..."));
   display.display();

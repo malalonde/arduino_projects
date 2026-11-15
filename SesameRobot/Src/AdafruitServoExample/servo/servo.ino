@@ -1,4 +1,20 @@
-/*************************************************** 
+/***************************
+131415161718192021222324252627282930313233
+// --- Access Point Configuration ---
+// This is the network the Robot will create
+#define AP_SSID  "Sesame-Controller"
+#define AP_PASS  "12345678" // Must be at least 8 characters
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+#define OLED_I2C_ADDR 0x3D
+
+
+Message (Enter to send message to 'Adafruit Feather ESP32-S3 2MB PSRAM' on 'COM24')
+New Line
+115200 baud
+************************ 
   This is an example for our Adafruit 16-channel PWM & Servo driver
   Servo test - this will drive 8 servos, one after the other on the
   first 8 pins of the PCA9685
